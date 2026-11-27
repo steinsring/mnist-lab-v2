@@ -1,0 +1,8 @@
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.ipynb_checkpoints/
+data/mnist.npz
+data/*.part
+.DS_Store
+.venv/
