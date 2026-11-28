@@ -57,7 +57,7 @@ def train(model, criterion, optimizer, x_train, y_train,
         loss_history: epoch별 평균 손실 리스트
     """
     # 아래 한 줄은 구현을 시작할 때 삭제하세요.
-    raise NotImplementedError("train()의 TODO 1~4를 구현하세요.")
+    # raise NotImplementedError("train()의 TODO 1~4를 구현하세요.")
 
     rng = np.random.default_rng(seed)
     loss_history = []
@@ -69,15 +69,17 @@ def train(model, criterion, optimizer, x_train, y_train,
         for x_batch, y_batch in iterate_minibatches(x_train, y_train, batch_size, rng=rng):
             # TODO 1 (Forward): model에 x_batch를 학습 모드로 통과시켜 logits를 얻으세요.
             #                   힌트: model.forward(..., train=True)
-            logits = None
+            logits = model.forward(x_batch, train = True)
 
             # TODO 2 (Loss): criterion으로 logits와 y_batch의 손실을 계산해 loss에 담으세요.
-            loss = None
+            loss = criterion.forward(logits, y_batch)
 
             # TODO 3 (Backward): criterion.backward()로 출력층 gradient를 만든 뒤
             #                    model.backward()에 넘기세요. 이 호출로 model.grads가 채워집니다.
+            model.backward(criterion.backward())
 
             # TODO 4 (Update): optimizer로 model.params를 model.grads만큼 갱신하세요.
+            optimizer.update(model.params, model.grads)
 
             batch_losses.append(loss)
 
@@ -89,7 +91,6 @@ def train(model, criterion, optimizer, x_train, y_train,
             print(f"epoch {epoch + 1:3d}/{epochs}  loss {epoch_loss:.4f}  ({elapsed:.1f}s)")
 
     return loss_history
-
 
 def gradient_check(model, criterion, x, y, num_checks=8, eps=1e-5, tol=1e-6,
                    atol=1e-8, seed=0, verbose=True):

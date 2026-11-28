@@ -47,10 +47,20 @@ class SoftmaxWithLoss:
 
         힌트: 정답 클래스 확률만 골라내려면 y_prob[np.arange(batch_size), y_true]를 씁니다.
 
-        검증: 모든 logits가 0이면 확률이 모두 1/10이므로 손실은 ln(10) = 2.3026 이 됩니다.
+        검증: 모든 logits가 0이면 확률이 모두 1/10이므로 손로그은 ln(10) = 2.3026 이 됩니다.
         """
         # TODO: 위 1~4 순서대로 구현하세요.
-        raise NotImplementedError("SoftmaxWithLoss.forward를 구현하세요.")
+        # raise NotImplementedError("SoftmaxWithLoss.forward를 구현하세요.")//
+
+        self.y_prob = (e := np.exp(logits - logits.max(axis=1, keepdims=True)))/np.sum(e, axis=1, keepdims = True)
+
+        temp = np.zeros_like(self.y_prob)
+        for (i,val) in enumerate(y_true):
+            temp[i][val] = 1
+
+        self.y_true = temp
+
+        return -1*np.sum(temp*np.log(np.clip(self.y_prob, 1e-7, 1.0)))/len(temp)
 
     def backward(self):
         """
@@ -69,4 +79,8 @@ class SoftmaxWithLoss:
         검증: dx의 전체 합은 0에 가까워야 합니다. 왜 그런지 설명할 수 있어야 합니다.
         """
         # TODO: 위 1~3 순서대로 구현하세요.
-        raise NotImplementedError("SoftmaxWithLoss.backward를 구현하세요.")
+        # raise NotImplementedError("SoftmaxWithLoss.backward를 구현하세요.")
+        temp = np.copy(self.y_prob)
+        temp -= self.y_true
+        temp/=np.shape(self.y_prob)[0]
+        return temp

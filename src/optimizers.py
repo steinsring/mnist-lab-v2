@@ -44,8 +44,9 @@ class SGD:
             배열 내용을 직접 바꾸는 방식으로 구현하세요. (예: -= 연산자)
         """
         # TODO: params의 모든 key에 대해 gradient 반대 방향으로 제자리 갱신하세요.
-        raise NotImplementedError("SGD.update를 구현하세요.")
-
+        # raise NotImplementedError("SGD.update를 구현하세요.")
+        for key in params.keys():
+            params[key] -= self.lr * grads[key]
 
 class Adam:
     """

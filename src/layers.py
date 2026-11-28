@@ -32,7 +32,7 @@ class Affine:
             b: (output_dim,) 편향. params dict와 공유되는 배열입니다.
         """
         self.W = W
-        self.b = b
+        self.b = b  
         self.x = None
         self.dW = np.zeros_like(W)
         self.db = np.zeros_like(b)
@@ -50,7 +50,9 @@ class Affine:
         """
         # TODO 1: backward에서 다시 써야 하므로 입력 x를 self.x에 저장하세요.
         # TODO 2: x @ W + b 를 계산해 반환하세요. b는 broadcasting으로 모든 행에 더해집니다.
-        raise NotImplementedError("Affine.forward를 구현하세요.")
+        # raise NotImplementedError("Affine.forward를 구현하세요.")
+        self.x = x
+        return x@self.W+self.b
 
     def backward(self, dout):
         """
@@ -71,7 +73,9 @@ class Affine:
         # TODO 2: self.db를 계산하세요. bias는 batch의 모든 샘플에 더해졌으므로
         #         gradient는 batch 방향으로 합쳐야 합니다.
         # TODO 3: dx를 계산해 반환하세요.
-        raise NotImplementedError("Affine.backward를 구현하세요.")
+        # raise NotImplementedError("Affine.backward를 구현하세요.")
+        self.dW,self.db=(g:=np.c_[self.x,np.ones(len(self.x))].T@dout)[:-1],g[-1]
+        return dout@self.W.T
 
 
 class BatchNorm:

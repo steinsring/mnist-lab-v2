@@ -23,6 +23,17 @@ python download_mnist.py
 
 pytest tests/ -v
 python tools/selfcheck.py --day 1
+
+cd "$HOME/Desktop/krafton-jungle/Week 15/mnist-lab"
+python3 -m venv .venv
+source .venv/bin/activate
+python -m pip install -r requirements.txt
+
+cd "$HOME/Desktop/krafton-jungle/Week 15/mnist-lab"
+source .venv/bin/activate
+python -m pytest tests/test_affine.py -v
+
+python -m pytest tests/test_affine.py -v
 ```
 
 처음 전체 테스트가 실패하는 것은 정상입니다. 현재 Day의 TODO를 직접 구현하고 해당 테스트부터 통과시키세요.
